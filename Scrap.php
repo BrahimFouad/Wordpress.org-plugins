@@ -10,7 +10,7 @@
             CURLOPT_TIMEOUT => 3,
             CURLOPT_VERBOSE => FALSE,
             CURLOPT_HEADER => TRUE,
-            CURLOPT_FOLLOWLOCATION => FALSE,
+            CURLOPT_FOLLOWLOCATION => TRUE,
             CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows; U; Windows NT 5.1; pl; rv:1.9) Gecko/2008052906 Firefox/3.0',
             CURLOPT_AUTOREFERER => FALSE,
             CURLOPT_NOBODY => FALSE,
@@ -48,6 +48,7 @@
 
         public function pluginDetail($url){
 
+            //https://fr.wordpress.org/plugins/?p=42561
             if ( ( $content = self::get($url) ) == FALSE ) {
                 return FALSE;
             }
@@ -148,5 +149,19 @@
 //var_dump($A -> getCount());
 //var_dump($A -> search('wp'));
 //var_dump($A -> pluginDetail("https://fr.wordpress.org/plugins/wpforms-lite/"));
+
+
+// Use Case : Download all plugins from wordpress.org
+/*
+$A = new Wordpress();
+for($i = 0; $i < 50000; $i++){
+    if (($infos = $A -> pluginDetail('https://fr.wordpress.org/plugins/?p='.$i)) != FALSE ){
+        $dir = str_replace('.zip','',basename($infos["downloadUrl"]));
+        @mkdir($dir);
+        @file_put_contents(('./'.$dir.'/report.txt'), var_export($infos, true));
+        @system(('wget '.escapeshellarg($infos["downloadUrl"]).' -P '.$dir.' &'));
+    }
+}
+*/
     
 ?>
